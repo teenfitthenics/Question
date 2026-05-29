@@ -1,92 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Game ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(180deg,#fff5f7,#ffe5ec);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+/* GAME BOX */
+.container{
+  width:92%;
+  max-width:420px;
+  text-align:center;
+}
+
+h1{
+  color:#d90429;
+  margin-bottom:10px;
+}
+
+/* GRID 9 HOLES */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+
+.hole{
+  width:100%;
+  aspect-ratio:1;
+  background:#fff0f3;
+  border-radius:20px;
+  position:relative;
+  box-shadow:inset 0 0 10px rgba(0,0,0,0.08);
+  overflow:hidden;
+}
+
+/* ITEM (HEART / BOMB) */
+.item{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:2rem;
+  cursor:pointer;
+  user-select:none;
+  transition:0.15s;
+}
+
+.item:active{
+  transform:translate(-50%,-50%) scale(0.8);
+}
+
+/* SCORE */
+.score{
+  margin-top:15px;
+  font-size:1.3rem;
+  color:#c1121f;
+  font-weight:700;
+}
+
+/* GAME OVER SCREEN */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+.overlay h2{
+  font-size:2rem;
+}
+
+.fall{
+  position:absolute;
+  font-size:1.5rem;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  from{
+    transform:translateY(-10vh);
+    opacity:1;
+  }
+  to{
+    transform:translateY(110vh);
+    opacity:0;
+  }
+}
+
+button{
+  margin-top:15px;
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  background:#ff4d6d;
+  color:white;
+  font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Catch My Love ❤️</h1>
+
+  <div class="score">Score: <span id="score">0</span></div>
+
+  <div class="grid" id="grid"></div>
+
+</div>
+
+<div class="overlay" id="gameOver">
+  <h2 id="finalText"></h2>
+  <button onclick="location.reload()">Play Again ❤️</button>
+</div>
+
 <script>
 
-const heart = document.getElementById("heart");
-const gameArea = document.getElementById("gameArea");
+const grid = document.getElementById("grid");
 const scoreText = document.getElementById("score");
+const overlay = document.getElementById("gameOver");
+const finalText = document.getElementById("finalText");
 
 let score = 0;
+let activeIndex = -1;
+let bombMode = false;
+let speed = 900;
+let interval;
 
-
-// RANDOM HEART MOVEMENT
-
-function moveHeart(){
-
-  const areaWidth = gameArea.clientWidth - 80;
-  const areaHeight = gameArea.clientHeight - 80;
-
-  const randomX = Math.random() * areaWidth;
-  const randomY = Math.random() * areaHeight;
-
-  const randomSize = Math.random() * 25 + 35;
-
-  const randomRotate = Math.random() * 360;
-
-  heart.style.transition =
-    `all ${Math.random() * 0.18 + 0.12}s linear`;
-
-  heart.style.left = randomX + "px";
-
-  heart.style.top = randomY + "px";
-
-  heart.style.fontSize = randomSize + "px";
-
-  heart.style.transform = `rotate(${randomRotate}deg)`;
+// CREATE 9 HOLES
+for(let i=0;i<9;i++){
+  const hole = document.createElement("div");
+  hole.classList.add("hole");
+  hole.dataset.index = i;
+  grid.appendChild(hole);
 }
 
+// SHOW RANDOM ITEM
+function spawn(){
 
-// CLICK EVENT
+  const holes = document.querySelectorAll(".hole");
 
-heart.addEventListener("click", () => {
+  holes.forEach(h => h.innerHTML = "");
+
+  activeIndex = Math.floor(Math.random()*9);
+
+  const hole = holes[activeIndex];
+
+  const item = document.createElement("div");
+  item.classList.add("item");
+
+  // AFTER SCORE 10 → BOMB MODE
+  if(score >= 10 && Math.random() < 0.3){
+    item.innerHTML = "💣";
+    item.onclick = explodeGame;
+    bombMode = true;
+  } else {
+    item.innerHTML = "❤️";
+    item.onclick = hitHeart;
+  }
+
+  hole.appendChild(item);
+}
+
+// HEART CLICK
+function hitHeart(){
 
   score++;
-
   scoreText.innerText = score;
 
-  heart.style.transform += " scale(1.25)";
+  if(score % 3 === 0 && speed > 300){
+    speed -= 80;
+    clearInterval(interval);
+    interval = setInterval(spawn, speed);
+  }
 
-  setTimeout(() => {
-
-    moveHeart();
-
-  },60);
-
-});
-
-
-// FAST RANDOM MOVEMENT
-
-setInterval(() => {
-
-  moveHeart();
-
-},350);
-
-moveHeart();
-
-
-// FLOATING BACKGROUND HEARTS
-
-const bg = document.getElementById("bg");
-
-for(let i=0;i<30;i++){
-
-  const h = document.createElement("div");
-
-  h.classList.add("floating-heart");
-
-  h.innerHTML = "❤️";
-
-  h.style.left = Math.random()*100 + "vw";
-
-  h.style.fontSize =
-    (Math.random()*20 + 14) + "px";
-
-  h.style.animationDuration =
-    (Math.random()*8 + 6) + "s";
-
-  h.style.opacity = Math.random();
-
-  bg.appendChild(h);
+  spawn();
 }
 
+// BOMB CLICK → GAME OVER
+function explodeGame(){
+
+  showGameOver("💥 Boom! Game Over 💥", score);
+}
+
+// GAME OVER SCREEN + FALLING HEARTS
+function showGameOver(text, finalScore){
+
+  clearInterval(interval);
+
+  overlay.style.display = "flex";
+  finalText.innerHTML = `${text}<br><br>Score: ${finalScore}`;
+
+  for(let i=0;i<40;i++){
+    createFall();
+  }
+}
+
+// FALLING HEARTS ANIMATION
+function createFall(){
+
+  const emoji = document.createElement("div");
+  emoji.classList.add("fall");
+  emoji.innerHTML = ["❤️","💖","💘","💝"][Math.floor(Math.random()*4)];
+
+  emoji.style.left = Math.random()*100 + "vw";
+  emoji.style.animationDuration = (Math.random()*2 + 2) + "s";
+  emoji.style.fontSize = (Math.random()*20 + 15) + "px";
+
+  document.body.appendChild(emoji);
+
+  setTimeout(()=>emoji.remove(),4000);
+}
+
+// START GAME
+interval = setInterval(spawn, speed);
+spawn();
+
 </script>
+
+</body>
+</html>
