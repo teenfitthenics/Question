@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Do You Love Me? ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#12070d;
+  color:white;
+  position:relative;
+}
+
+/* Animated Background */
+
+.gradient-bg{
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:
+  radial-gradient(circle at top left,#ff004c55,transparent 30%),
+  radial-gradient(circle at bottom right,#ff5c8a44,transparent 30%),
+  radial-gradient(circle at center,#ff174444,transparent 40%);
+  animation:bgMove 12s ease infinite alternate;
+  z-index:-5;
+}
+
+@keyframes bgMove{
+  0%{
+    transform:translate(-10%,-10%) rotate(0deg);
+  }
+  100%{
+    transform:translate(10%,10%) rotate(8deg);
+  }
+}
+
+/* Floating Hearts */
+
+.hearts::before,
+.hearts::after{
+  content:"💖 💕 ❤️ 💘 💓";
+  position:absolute;
+  width:100%;
+  top:100%;
+  left:0;
+  font-size:2rem;
+  opacity:0.4;
+  animation:floatHearts 12s linear infinite;
+}
+
+.hearts::after{
+  animation-delay:6s;
+}
+
+@keyframes floatHearts{
+  from{
+    transform:translateY(0);
+  }
+  to{
+    transform:translateY(-120vh);
+  }
+}
+
+/* Floating Text */
+
+.floating-text{
+  position:absolute;
+  color:rgba(255,255,255,0.25);
+  font-size:1rem;
+  animation:floating 8s ease-in-out infinite;
+}
+
+.text1{
+  top:12%;
+  left:10%;
+}
+
+.text2{
+  top:70%;
+  right:12%;
+}
+
+.text3{
+  bottom:12%;
+  left:40%;
+}
+
+@keyframes floating{
+  0%,100%{
+    transform:translateY(0);
+  }
+  50%{
+    transform:translateY(-15px);
+  }
+}
+
+/* Glass Card */
+
+.glass-card{
+  width:90%;
+  max-width:450px;
+  padding:50px;
+  border-radius:30px;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:
+  0 0 40px rgba(255,0,76,0.3),
+  inset 0 0 20px rgba(255,255,255,0.05);
+  text-align:center;
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.heart-icon{
+  font-size:75px;
+  animation:heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat{
+  0%,100%{
+    transform:scale(1);
+  }
+  25%{
+    transform:scale(1.15);
+  }
+  40%{
+    transform:scale(0.95);
+  }
+  60%{
+    transform:scale(1.12);
+  }
+}
+
+h1{
+  margin-top:20px;
+  font-size:2.3rem;
+  font-weight:700;
+}
+
+/* Buttons */
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:40px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:15px 35px;
+  border:none;
+  border-radius:50px;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:600;
+  transition:0.35s ease;
+}
+
+.yes-btn{
+  background:#ff1744;
+  color:white;
+  box-shadow:0 0 20px rgba(255,23,68,0.5);
+}
+
+.no-btn{
+  background:rgba(255,255,255,0.08);
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.btn:hover{
+  transform:translateY(-5px) scale(1.05);
+}
+
+.yes-btn:hover{
+  box-shadow:0 0 40px rgba(255,23,68,0.9);
+}
+
+/* Success Screen */
+
+.success-screen{
+  text-align:center;
+  animation:fadeIn 1s ease;
+}
+
+.hidden{
+  display:none;
+}
+
+.big-heart{
+  font-size:120px;
+  animation:heartbeat 1.2s infinite;
+}
+
+.love-message{
+  margin-top:15px;
+  font-size:1.2rem;
+  opacity:0.9;
+}
+
+.stickers{
+  margin-top:25px;
+  font-size:2rem;
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{
+    transform:translateY(0);
+  }
+  50%{
+    transform:translateY(-10px);
+  }
+}
+
+/* Cursor Hearts */
+
+.cursor-heart{
+  position:fixed;
+  pointer-events:none;
+  font-size:14px;
+  animation:cursorFloat 1s linear forwards;
+}
+
+@keyframes cursorFloat{
+  0%{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translateY(-30px) scale(1.8);
+  }
+}
+
+/* Falling Hearts */
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* Responsive */
+
+@media(max-width:600px){
+
+  .glass-card{
+    padding:35px 25px;
+  }
+
+  h1{
+    font-size:1.8rem;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="gradient-bg"></div>
+<div class="hearts"></div>
+
+<!-- Floating Text -->
+<div class="floating-text text1">Love wins 💖</div>
+<div class="floating-text text2">You are cute ❤️</div>
+<div class="floating-text text3">I knew it 😌</div>
+
+<!-- Main Container -->
+<div class="container">
+
+  <!-- Question Card -->
+  <div class="glass-card" id="questionCard">
+
+    <div class="heart-icon">❤️</div>
+
+    <h1 id="question">Do you love me? ❤️</h1>
+
+    <div class="buttons">
+
+      <button class="btn yes-btn" id="yesBtn">
+        Yes 💖
+      </button>
+
+      <button class="btn no-btn" id="noBtn">
+        No 💔
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen hidden" id="successScreen">
+
+    <div class="big-heart">💖</div>
+
+    <h1>Yayyy! I knew it 💕</h1>
+
+    <p class="love-message">
+      You just made my heart skip a beat ❤️
+    </p>
+
+    <div class="stickers">
+      💕 💖 ❤️ 💘 💞 💓 💗
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const question = document.getElementById("question");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+const questionCard = document.getElementById("questionCard");
+const successScreen = document.getElementById("successScreen");
+
+let noCount = 0;
+
+/* Question Flow */
+
+const questions = [
+  "Think again 😏",
+  "Really? 🥺",
+  "Final chance… Do you love me or not? ❤️"
+];
+
+/* YES BUTTON */
+
+yesBtn.addEventListener("click", () => {
+
+  questionCard.classList.add("hidden");
+
+  setTimeout(() => {
+
+    successScreen.classList.remove("hidden");
+
+    createConfetti();
+
+  }, 300);
+
+});
+
+/* NO BUTTON */
+
+noBtn.addEventListener("click", () => {
+
+  noCount++;
+
+  if(noCount === 1){
+
+    question.innerText = questions[0];
+
+    yesBtn.innerHTML = "Yes ❤️";
+    noBtn.innerHTML = "No 🙈";
+
+  }
+
+  else if(noCount === 2){
+
+    question.innerText = questions[1];
+
+    yesBtn.innerHTML = "Yes 💕";
+    noBtn.innerHTML = "No 😭";
+
+  }
+
+  else{
+
+    question.innerText = questions[2];
+
+    yesBtn.innerHTML = "Yes 😍";
+    noBtn.innerHTML = "Yes 💖";
+
+    noBtn.addEventListener("mouseover", moveButton);
+
+  }
+
+});
+
+/* Moving Button */
+
+function moveButton(){
+
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 100 - 50;
+
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+}
+
+/* Confetti Hearts */
+
+function createConfetti(){
+
+  for(let i = 0; i < 80; i++){
+
+    const heart = document.createElement("div");
+
+    heart.innerHTML = "💖";
+
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "-20px";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    heart.style.animation = `fall ${Math.random() * 3 + 3}s linear forwards`;
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 6000);
+
+  }
+
+}
+
+/* Cursor Hearts */
+
+document.addEventListener("mousemove", (e) => {
+
+  const heart = document.createElement("div");
+
+  heart.innerHTML = "❤️";
+
+  heart.classList.add("cursor-heart");
+
+  heart.style.left = e.clientX + "px";
+  heart.style.top = e.clientY + "px";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 1000);
+
+});
+
+</script>
+
+</body>
+</html>
